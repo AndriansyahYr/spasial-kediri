@@ -1,190 +1,315 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
-        <meta name="mobile-web-app-capable" content="yes">
-        <meta name="apple-mobile-web-app-capable" content="yes">
-        <link rel="stylesheet" href="qgis/css/leaflet.css" />
-        <link rel="stylesheet" type="text/css" href="qgis/css/qgis2web.css">
-        <link rel="stylesheet" type="text/css" href="bootstrap/bootstrap.min.css">
-        <link rel="stylesheet" href="qgis/css/label.css" />
-        <link rel="stylesheet" href="qgis/css/MarkerCluster.css" />
-        <link rel="stylesheet" href="qgis/css/MarkerCluster.Default.css" />
-        <script src="qgis/js/leaflet.js"></script>
-        <script src="qgis/js/leaflet-heat.js"></script>
-        <script src="qgis/js/leaflet.rotatedMarker.js"></script>
-        <script src="qgis/js/OSMBuildings-Leaflet.js"></script>
-        <script src="qgis/js/leaflet-hash.js"></script>
-        <script src="qgis/js/label.js"></script>
-        <script src="qgis/js/Autolinker.min.js"></script>
-        <script src="qgis/js/leaflet.markercluster.js"></script>
-        <style>
-        #map {
-            width: 1119px;
-            height: 574px;
-        }
-        /*table, th, td {
-            border: 1px solid black;
-            border-collapse: collapse;
-        }
-        th, td {
-            padding: 5px;
-            text-align: left;
-        }*/
-        </style>
-        <title>SPASIAL</title>
-    </head>
-    <body>
-        <div class="row">
-        <div id="map" class="col-md-9"></div>
-        <div class="col-md-3">
-        <h2 id="namadesa">Desa</h2>
-            <div id="data-table" style="visibility: hidden;">
-            <!-- <table> -->
-            <table class="table"><tr><td id="data-id" colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(String(feature.properties['OBJECTID'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-iddesa">' + (feature.properties['FID_IDDESA'] !== null ? Autolinker.link(String(feature.properties['FID_IDDESA'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-region">' + (feature.properties['REGION'] !== null ? Autolinker.link(String(feature.properties['REGION'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-desa">' + (feature.properties['DESA'] !== null ? Autolinker.link(String(feature.properties['DESA'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-kecamatan">' + (feature.properties['KECAMATAN'] !== null ? Autolinker.link(String(feature.properties['KECAMATAN'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-kabupaten">' + (feature.properties['KABUPATEN'] !== null ? Autolinker.link(String(feature.properties['KABUPATEN'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-provinsi">' + (feature.properties['PROVINSI'] !== null ? Autolinker.link(String(feature.properties['PROVINSI'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-negara">' + (feature.properties['NEGARA'] !== null ? Autolinker.link(String(feature.properties['NEGARA'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-kodeunsur">' + (feature.properties['KODE_UNSUR'] !== null ? Autolinker.link(String(feature.properties['KODE_UNSUR'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-topnym">' + (feature.properties['TOPONYM'] !== null ? Autolinker.link(String(feature.properties['TOPONYM'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-luasdesa">' + (feature.properties['LUAS_DESA'] !== null ? Autolinker.link(String(feature.properties['LUAS_DESA'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-luaskeca">' + (feature.properties['LUAS_KECA'] !== null ? Autolinker.link(String(feature.properties['LUAS_KECA'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-luaskabu">' + (feature.properties['LUAS_KABU'] !== null ? Autolinker.link(String(feature.properties['LUAS_KABU'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-luasprov">' + (feature.properties['LUAS_PROV'] !== null ? Autolinker.link(String(feature.properties['LUAS_PROV'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-luasunsur">' + (feature.properties['LUAS_UNSUR'] !== null ? Autolinker.link(String(feature.properties['LUAS_UNSUR'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-webprov">' + (feature.properties['WEB_PROV'] !== null ? Autolinker.link(String(feature.properties['WEB_PROV'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-webkabu">' + (feature.properties['WEB_KABU'] !== null ? Autolinker.link(String(feature.properties['WEB_KABU'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-shape">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(String(feature.properties['Shape_Leng'])) : '') + 
-            '</td></tr><tr><td colspan="2" id="data-shapearea"> ' + (feature.properties['Shape_Area'] !== null ? Autolinker.link(String(feature.properties['Shape_Area'])) : '') +'</td></tr></table>
-            <!-- </table> -->
-        </div>
-        </div>
-        </div>
-        
-        <!-- <div id="data-table" style="visibility: hidden;"> -->
-        
-        <script src="qgis/data/json_Administrasi0.js"></script>
-        <script>
-        function toggleAppearance(){
-            var dataDiv = document.getElementById("data-table");
-            if(dataDiv.style.visibility == "hidden"){
-                dataDiv.style.visibility = "visible";
-            }
-        }
-        L.ImageOverlay.include({
-            getBounds: function () {
-                return this._bounds;
-            }
-        });
-        var map = L.map('map', {
-            zoomControl:true, maxZoom:90, minZoom:1
-        }).fitBounds([[-8.02236596475,111.686067969],[-7.58931817125,112.533170232]]);
-        var hash = new L.Hash(map);
-        map.attributionControl.addAttribution('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a>');
-        var feature_group = new L.featureGroup([]);
-        var bounds_group = new L.featureGroup([]);
-        var raster_group = new L.LayerGroup([]);
-        var basemap0 = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '&copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors,<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>',
-            maxZoom: 90
-        });
-        basemap0.addTo(map);
-        var initialOrder = new Array();
-        var layerOrder = new Array();
-        function stackLayers() {
-            for (index = 0; index < initialOrder.length; index++) {
-                map.removeLayer(initialOrder[index]);
-                map.addLayer(initialOrder[index]);
-            }
-        }
-        function restackLayers() {
-            for (index = 0; index < layerOrder.length; index++) {
-                layerOrder[index].bringToFront();
-            }
-        }
-        layerControl = L.control.layers({},{},{collapsed:false});
-        function geoJson2heat(geojson, weight) {
-          return geojson.features.map(function(feature) {
-            return [
-              feature.geometry.coordinates[1],
-              feature.geometry.coordinates[0],
-              feature.properties[weight]
-            ];
-          });
-        }
-        function pop_Administrasi0(feature, layer) {
-            layer.on('click', function(e) {
-                var dt = document.getElementById('data-table');
-                if(dt.style.visibility="hidden"){
-                    dt.style.visibility="visible";
-                }
-                document.getElementById('data-id').innerHTML = feature.properties['OBJECTID']; 
-                document.getElementById('data-iddesa').innerHTML = feature.properties['FID_IDDESA']; 
-                document.getElementById('data-region').innerHTML = feature.properties['REGION']; 
-                document.getElementById('data-desa').innerHTML = feature.properties['DESA']; 
-                document.getElementById('data-kecamatan').innerHTML = feature.properties['KECAMATAN']; 
-                document.getElementById('data-kabupaten').innerHTML = feature.properties['KABUPATEN']; 
-                document.getElementById('data-provinsi').innerHTML = feature.properties['PROVINSI']; 
-                document.getElementById('data-negara').innerHTML = feature.properties['NEGARA']; 
-                document.getElementById('data-kodeunsur').innerHTML = feature.properties['KODE_UNSUR']; 
-                document.getElementById('data-topnym').innerHTML = feature.properties['TOPONYM'];
-                document.getElementById('data-luasdesa').innerHTML = feature.properties['LUAS_DESA'];
-                document.getElementById('data-luaskeca').innerHTML = feature.properties['LUAS_KECA'];
-                document.getElementById('data-luaskabu').innerHTML = feature.properties['LUAS_KABU'];
-                document.getElementById('data-luasprov').innerHTML = feature.properties['LUAS_PROV'];
-                document.getElementById('data-luasunsur').innerHTML = feature.properties['LUAS_UNSUR'];
-                document.getElementById('data-webprov').innerHTML = feature.properties['WEB_PROV'];
-                document.getElementById('data-webkabu').innerHTML = feature.properties['WEB_KABU'];
-                document.getElementById('data-shape').innerHTML = feature.properties['Shape_Leng'];
-                document.getElementById('data-shapearea').innerHTML = feature.properties['Shape_Area']; 
-            });
-            layer.on('mouseover', function(e) {
-                document.getElementById('namadesa').innerHTML = feature.properties['DESA'];
-            });
-            var popupContent = '<table><tr><td colspan="2">' + (feature.properties['OBJECTID'] !== null ? Autolinker.link(String(feature.properties['OBJECTID'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['FID_IDDESA'] !== null ? Autolinker.link(String(feature.properties['FID_IDDESA'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['REGION'] !== null ? Autolinker.link(String(feature.properties['REGION'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['DESA'] !== null ? Autolinker.link(String(feature.properties['DESA'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['KECAMATAN'] !== null ? Autolinker.link(String(feature.properties['KECAMATAN'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['KABUPATEN'] !== null ? Autolinker.link(String(feature.properties['KABUPATEN'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['PROVINSI'] !== null ? Autolinker.link(String(feature.properties['PROVINSI'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['NEGARA'] !== null ? Autolinker.link(String(feature.properties['NEGARA'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['KODE_UNSUR'] !== null ? Autolinker.link(String(feature.properties['KODE_UNSUR'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['TOPONYM'] !== null ? Autolinker.link(String(feature.properties['TOPONYM'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['LUAS_DESA'] !== null ? Autolinker.link(String(feature.properties['LUAS_DESA'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['LUAS_KECA'] !== null ? Autolinker.link(String(feature.properties['LUAS_KECA'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['LUAS_KABU'] !== null ? Autolinker.link(String(feature.properties['LUAS_KABU'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['LUAS_PROV'] !== null ? Autolinker.link(String(feature.properties['LUAS_PROV'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['LUAS_UNSUR'] !== null ? Autolinker.link(String(feature.properties['LUAS_UNSUR'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['WEB_PROV'] !== null ? Autolinker.link(String(feature.properties['WEB_PROV'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['WEB_KABU'] !== null ? Autolinker.link(String(feature.properties['WEB_KABU'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_Leng'] !== null ? Autolinker.link(String(feature.properties['Shape_Leng'])) : '') + '</td></tr><tr><td colspan="2">' + (feature.properties['Shape_Area'] !== null ? Autolinker.link(String(feature.properties['Shape_Area'])) : '') + '</td></tr><tr><td colspan="2">' + '<a href=data.php?'+feature.properties['OBJECTID']+'>show<a/>' +'</td></tr></table>';
-            // var popupContent = '<table><tr><td colspan="2">' ++ '</td></tr></table>';
-            // toggleAppearance();
-            // layer.openPopup();
-            // layer.bindPopup(popupContent);
+<?php
+/**
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2014 - 2016, British Columbia Institute of Technology
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2016, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	https://codeigniter.com
+ * @since	Version 1.0.0
+ * @filesource
+ */
 
-        }
+/*
+ *---------------------------------------------------------------
+ * APPLICATION ENVIRONMENT
+ *---------------------------------------------------------------
+ *
+ * You can load different configurations depending on your
+ * current environment. Setting the environment also influences
+ * things like logging and error reporting.
+ *
+ * This can be set to anything, but default usage is:
+ *
+ *     development
+ *     testing
+ *     production
+ *
+ * NOTE: If you change these, also change the error_reporting() code below
+ */
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+switch (ENVIRONMENT)
+{
+	case 'development':
+		error_reporting(-1);
+		ini_set('display_errors', 1);
+	break;
+
+	case 'testing':
+	case 'production':
+		ini_set('display_errors', 0);
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+		}
+	break;
+
+	default:
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'The application environment is not set correctly.';
+		exit(1); // EXIT_ERROR
+}
+
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "system" directory.
+ * Set the path if it is not in the same directory as this file.
+ */
+	$system_path = 'system';
+
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want this front controller to use a different "application"
+ * directory than the default one you can set its name here. The directory
+ * can also be renamed or relocated anywhere on your server. If you do,
+ * use an absolute (full) server path.
+ * For more info please see the user guide:
+ *
+ * https://codeigniter.com/user_guide/general/managing_apps.html
+ *
+ * NO TRAILING SLASH!
+ */
+	$application_folder = 'application';
+
+/*
+ *---------------------------------------------------------------
+ * VIEW DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want to move the view directory out of the application
+ * directory, set the path to it here. The directory can be renamed
+ * and relocated anywhere on your server. If blank, it will default
+ * to the standard location inside your application directory.
+ * If you do move this, use an absolute (full) server path.
+ *
+ * NO TRAILING SLASH!
+ */
+	$view_folder = '';
 
 
+/*
+ * --------------------------------------------------------------------
+ * DEFAULT CONTROLLER
+ * --------------------------------------------------------------------
+ *
+ * Normally you will set your default controller in the routes.php file.
+ * You can, however, force a custom routing by hard-coding a
+ * specific controller class/function here. For most applications, you
+ * WILL NOT set your routing here, but it's an option for those
+ * special instances where you might want to override the standard
+ * routing in a specific front controller that shares a common CI installation.
+ *
+ * IMPORTANT: If you set the routing here, NO OTHER controller will be
+ * callable. In essence, this preference limits your application to ONE
+ * specific controller. Leave the function name blank if you need
+ * to call functions dynamically via the URI.
+ *
+ * Un-comment the $routing array below to use this feature
+ */
+	// The directory name, relative to the "controllers" directory.  Leave blank
+	// if your controller is not in a sub-directory within the "controllers" one
+	// $routing['directory'] = '';
 
-        // function showTable(feature, layer){
-            
-        // }
+	// The controller class file name.  Example:  mycontroller
+	// $routing['controller'] = '';
 
-        function doStyleAdministrasi0(feature) {
-            return {
-                weight: 1.04,
-                color: '#000000',
-                fillColor: '#d6cd68',
-                dashArray: '',
-                lineCap: 'square',
-                lineJoin: 'bevel',
-                opacity: 1.0,
-                fillOpacity: 1.0
-            };
-        }
-        var json_Administrasi0JSON = new L.geoJson(json_Administrasi0, {
-            onEachFeature: pop_Administrasi0,
-            style: doStyleAdministrasi0
-        });
-        layerOrder[layerOrder.length] = json_Administrasi0JSON;
-        bounds_group.addLayer(json_Administrasi0JSON);
-        initialOrder[initialOrder.length] = json_Administrasi0JSON;
-        feature_group.addLayer(json_Administrasi0JSON);
-        raster_group.addTo(map);
-        feature_group.addTo(map);
-        stackLayers();
-        map.on('overlayadd', restackLayers);
-        </script>
-    </body>
-</html>
+	// The controller function you wish to be called.
+	// $routing['function']	= '';
+
+
+/*
+ * -------------------------------------------------------------------
+ *  CUSTOM CONFIG VALUES
+ * -------------------------------------------------------------------
+ *
+ * The $assign_to_config array below will be passed dynamically to the
+ * config class when initialized. This allows you to set custom config
+ * items or override any default config values found in the config.php file.
+ * This can be handy as it permits you to share one application between
+ * multiple front controller files, with each file containing different
+ * config values.
+ *
+ * Un-comment the $assign_to_config array below to use this feature
+ */
+	// $assign_to_config['name_of_config_item'] = 'value of config item';
+
+
+
+// --------------------------------------------------------------------
+// END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
+// --------------------------------------------------------------------
+
+/*
+ * ---------------------------------------------------------------
+ *  Resolve the system path for increased reliability
+ * ---------------------------------------------------------------
+ */
+
+	// Set the current directory correctly for CLI requests
+	if (defined('STDIN'))
+	{
+		chdir(dirname(__FILE__));
+	}
+
+	if (($_temp = realpath($system_path)) !== FALSE)
+	{
+		$system_path = $_temp.DIRECTORY_SEPARATOR;
+	}
+	else
+	{
+		// Ensure there's a trailing slash
+		$system_path = strtr(
+			rtrim($system_path, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		).DIRECTORY_SEPARATOR;
+	}
+
+	// Is the system path correct?
+	if ( ! is_dir($system_path))
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
+		exit(3); // EXIT_CONFIG
+	}
+
+/*
+ * -------------------------------------------------------------------
+ *  Now that we know the path, set the main path constants
+ * -------------------------------------------------------------------
+ */
+	// The name of THIS file
+	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
+
+	// Path to the system directory
+	define('BASEPATH', $system_path);
+
+	// Path to the front controller (this file) directory
+	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
+
+	// Name of the "system" directory
+	define('SYSDIR', basename(BASEPATH));
+
+	// The path to the "application" directory
+	if (is_dir($application_folder))
+	{
+		if (($_temp = realpath($application_folder)) !== FALSE)
+		{
+			$application_folder = $_temp;
+		}
+		else
+		{
+			$application_folder = strtr(
+				rtrim($application_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(BASEPATH.$application_folder.DIRECTORY_SEPARATOR))
+	{
+		$application_folder = BASEPATH.strtr(
+			trim($application_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
+
+	// The path to the "views" directory
+	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.'views';
+	}
+	elseif (is_dir($view_folder))
+	{
+		if (($_temp = realpath($view_folder)) !== FALSE)
+		{
+			$view_folder = $_temp;
+		}
+		else
+		{
+			$view_folder = strtr(
+				rtrim($view_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(APPPATH.$view_folder.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.strtr(
+			trim($view_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ */
+require_once BASEPATH.'core/CodeIgniter.php';
